@@ -1,5 +1,0 @@
-7767517
-3 3
-Input                    in0                      0 1 in0
-InnerProduct             fcrelu_0                 1 1 in0 1 0=128 1=1 2=100352 9=1
-InnerProduct             linear_2                 1 1 1 out0 0=10 1=1 2=1280

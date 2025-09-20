@@ -72,13 +72,31 @@ def main():
         acc = evaluate(model, test_loader)
         print(f"Epoch {epoch+1} loss={loss:.4f} acc={acc*100:.2f}%")
 
-    dummy = torch.randn(1, 784)
-    torch.onnx.export(
-        model,
-        dummy,
-        './mnist_fc/mnist_fc.onnx',
-        opset_version = 11,
-    )
+
+    # save weight/bias as C++ float array
+    fc1_weights = model.fc1.weight.flatten().tolist()
+    fc2_weights = model.fc2.weight.flatten().tolist()
+
+    fc1_bias = model.fc1.bias.tolist()
+    fc2_bias = model.fc2.bias.tolist()
+    
+    fc1_weight_str = ','.join([str(x) for x in fc1_weights])
+    fc2_weight_str = ','.join([str(x) for x in fc2_weights])
+    fc1_bias_str = ','.join([str(x) for x in fc1_bias])
+    fc2_bias_str = ','.join([str(x) for x in fc2_bias])
+
+    weight_const_str = "const float fc1_weight [] = {{ {} }};\nconst float fc1_bias [] = {{ {} }};\nconst float fc2_weight [] = {{ {} }};\nconst float fc2_bias [] = {{ {} }};".format(fc1_weight_str, fc1_bias_str, fc2_weight_str, fc2_bias_str)
+    with open('../src/mnist_fc.h', 'w') as f:
+        f.write(weight_const_str)
+
+    # save sample data as data
+    data = test_loader.dataset[0][0].flatten().tolist()
+    label = test_loader.dataset[0][1]
+
+    data_str = ','.join([str(x) for x in test_loader.dataset[0][0].flatten().tolist()])
+    data_const_str = "const float data [] = {{ {} }};\n".format(data_str)
+    with open('../src/data_{}.h'.format(label), 'w') as f:
+        f.write(data_const_str)
 
 
 if __name__ == "__main__":

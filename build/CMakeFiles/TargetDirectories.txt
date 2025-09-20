@@ -1,0 +1,3 @@
+/home/awkrail/research/quantnn/build/CMakeFiles/quantnn.dir
+/home/awkrail/research/quantnn/build/CMakeFiles/edit_cache.dir
+/home/awkrail/research/quantnn/build/CMakeFiles/rebuild_cache.dir

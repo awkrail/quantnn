@@ -85,7 +85,12 @@ def main():
     fc1_bias_str = ','.join([str(x) for x in fc1_bias])
     fc2_bias_str = ','.join([str(x) for x in fc2_bias])
 
-    weight_const_str = "const float fc1_weight [] = {{ {} }};\nconst float fc1_bias [] = {{ {} }};\nconst float fc2_weight [] = {{ {} }};\nconst float fc2_bias [] = {{ {} }};".format(fc1_weight_str, fc1_bias_str, fc2_weight_str, fc2_bias_str)
+    weight_const_str = (
+        "const std::vector<float> fc1_weight = {{ {} }};\n"
+        "const std::vector<float> fc1_bias = {{ {} }};\n"
+        "const std::vector<float> fc2_weight = {{ {} }};\n"
+        "const std::vector<float> fc2_bias = {{ {} }};"
+    ).format(fc1_weight_str, fc1_bias_str, fc2_weight_str, fc2_bias_str)
     with open('../src/mnist_fc.h', 'w') as f:
         f.write(weight_const_str)
 
@@ -93,8 +98,8 @@ def main():
     data = test_loader.dataset[0][0].flatten().tolist()
     label = test_loader.dataset[0][1]
 
-    data_str = ','.join([str(x) for x in test_loader.dataset[0][0].flatten().tolist()])
-    data_const_str = "const float data [] = {{ {} }};\n".format(data_str)
+    data_str = ','.join([str(x) for x in data])
+    data_const_str = "const std::vector<float> data = {{ {} }};\n".format(data_str)
     with open('../src/data_{}.h'.format(label), 'w') as f:
         f.write(data_const_str)
 

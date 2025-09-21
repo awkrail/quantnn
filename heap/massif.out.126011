@@ -1,0 +1,187 @@
+desc: (none)
+cmd: ./build/quantnn
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=1957715
+mem_heap_B=73728
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=2361303
+mem_heap_B=475136
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=2763466
+mem_heap_B=475648
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=2764890
+mem_heap_B=480768
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=2766120
+mem_heap_B=480808
+mem_heap_extra_B=48
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=2767231
+mem_heap_B=483944
+mem_heap_extra_B=56
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=2768330
+mem_heap_B=484456
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=8204344
+mem_heap_B=484496
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=8274876
+mem_heap_B=484496
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=peak
+n2: 484496 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 410768 0x10A74D: std::__new_allocator<float>::allocate(unsigned long, void const*) (in /home/awkrail/research/quantnn/build/quantnn)
+  n2: 410768 0x10A462: std::_Vector_base<float, std::allocator<float> >::_M_allocate(unsigned long) (in /home/awkrail/research/quantnn/build/quantnn)
+   n1: 410216 0x10A1A8: void std::vector<float, std::allocator<float> >::_M_range_initialize<float const*>(float const*, float const*, std::forward_iterator_tag) (in /home/awkrail/research/quantnn/build/quantnn)
+    n3: 410216 0x109E7D: std::vector<float, std::allocator<float> >::vector(std::initializer_list<float>, std::allocator<float> const&) (in /home/awkrail/research/quantnn/build/quantnn)
+     n1: 401408 0x10995B: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/quantnn)
+      n1: 401408 0x109DDB: _GLOBAL__sub_I__ZN7MnistFCC2ERKSt6vectorIfSaIfEES4_S4_S4_ (in /home/awkrail/research/quantnn/build/quantnn)
+       n1: 401408 0x4B3A303: call_init (libc-start.c:145)
+        n1: 401408 0x4B3A303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 401408 0x109204: (below main) (in /home/awkrail/research/quantnn/build/quantnn)
+     n1: 5120 0x109AAB: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/quantnn)
+      n1: 5120 0x109DDB: _GLOBAL__sub_I__ZN7MnistFCC2ERKSt6vectorIfSaIfEES4_S4_S4_ (in /home/awkrail/research/quantnn/build/quantnn)
+       n1: 5120 0x4B3A303: call_init (libc-start.c:145)
+        n1: 5120 0x4B3A303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 5120 0x109204: (below main) (in /home/awkrail/research/quantnn/build/quantnn)
+     n0: 3688 in 3 places, all below massif's threshold (1.00%)
+   n0: 552 in 1 place, below massif's threshold (1.00%)
+ n1: 73728 0x491B38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+#-----------
+snapshot=10
+#-----------
+time=8274876
+mem_heap_B=484456
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=8275069
+mem_heap_B=483944
+mem_heap_extra_B=56
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=8278927
+mem_heap_B=484968
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=8288398
+mem_heap_B=481832
+mem_heap_extra_B=56
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=8288621
+mem_heap_B=481792
+mem_heap_extra_B=40
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=8288844
+mem_heap_B=476672
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=8289067
+mem_heap_B=476160
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=8289290
+mem_heap_B=74752
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=8300115
+mem_heap_B=1024
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=8301295
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=detailed
+n1: 0 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 0 in 3 places, all below massif's threshold (1.00%)

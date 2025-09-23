@@ -110,11 +110,11 @@ void MnistFC::relu(QuantizedBuffer & relu_hidden, const QuantizedBuffer & hidden
     float min_val = *std::min_element(hidden_fp32.begin(), hidden_fp32.end());
     float max_val = *std::max_element(hidden_fp32.begin(), hidden_fp32.end());
 
-    relu_hidden.s = (max_val - min_val) / 255.0f;
+    relu_hidden.s = (max_val - min_val) / 254.0f;
     relu_hidden.q.resize(hidden_fp32.size());
     for (int i = 0; i < relu_hidden.q.size(); i++)
     {
-        relu_hidden.q[i] = static_cast<int8_t>(std::clamp(std::round(hidden_fp32[i] / relu_hidden.s), -128.0f, 127.0f));
+        relu_hidden.q[i] = static_cast<int8_t>(std::clamp(std::round(hidden_fp32[i] / relu_hidden.s), -127.0f, 127.0f));
     }
 }
 
@@ -156,10 +156,10 @@ void MnistFC::fc1(QuantizedBuffer & hidden, const QuantizedBuffer & data)
     /* requantize the output vector */
     int32_t max_val = *std::max_element(hidden_test.begin(), hidden_test.end());
     int32_t min_val = *std::min_element(hidden_test.begin(), hidden_test.end());
-    hidden.s = (max_val - min_val) / 255.0f;
+    hidden.s = (max_val - min_val) / 254.0f;
     for (int i = 0; i < hidden_test.size(); i++)
     {
-        hidden.q[i] = static_cast<int8_t>(std::clamp(static_cast<float>(hidden_test[i]) / hidden.s, -128.0f, 127.0f));
+        hidden.q[i] = static_cast<int8_t>(std::clamp(static_cast<float>(hidden_test[i]) / hidden.s, -127.0f, 127.0f));
     }
 
 }
@@ -214,10 +214,10 @@ void MnistFC::fc2(QuantizedBuffer & output, const QuantizedBuffer & relu_hidden)
     /* requantize the output vector */
     int32_t max_val = *std::max_element(output_i32.begin(), output_i32.end());
     int32_t min_val = *std::min_element(output_i32.begin(), output_i32.end());
-    output.s = (max_val - min_val) / 255.0f;
+    output.s = (max_val - min_val) / 254.0f;
     for (int i = 0; i < output_i32.size(); i++)
     {
-        output.q[i] = static_cast<int8_t>(std::clamp(static_cast<float>(output_i32[i]) / output.s, -128.0f, 127.0f));
+        output.q[i] = static_cast<int8_t>(std::clamp(static_cast<float>(output_i32[i]) / output.s, -127.0f, 127.0f));
     }
 }
 
@@ -244,12 +244,12 @@ QuantizedBuffer MnistFC::quantize(const std::vector<float> & data)
 {
     float min_val = *std::min_element(data.begin(), data.end());
     float max_val = *std::max_element(data.begin(), data.end());
-    float s = (max_val - min_val) / 255.0f;
+    float s = (max_val - min_val) / 254.0f;
     
     std::vector<int8_t> quantized (data.size());
     for (int i = 0; i < data.size(); i++)
     {
-        float clamped_qw = std::clamp(std::round(data[i] / s), -128.0f, 127.0f);
+        float clamped_qw = std::clamp(std::round(data[i] / s), -127.0f, 127.0f);
         quantized[i] = static_cast<int8_t>(clamped_qw);
     }
 
@@ -262,7 +262,6 @@ int main(int argc, char * argv [])
     QuantizedBuffer qfc1 { fc1_weight, fc1_scale };
     QuantizedBuffer qfc2 { fc2_weight, fc2_scale };
     MnistFC model(qfc1, fc1_bias, qfc2, fc2_bias);
-    //int out = model.forward_fp32(data);
     int out = model.forward_int8(data);
     std::cout << "Prediction: " << out << std::endl;
     return 0;

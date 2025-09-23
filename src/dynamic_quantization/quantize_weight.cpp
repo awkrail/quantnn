@@ -27,12 +27,12 @@ QuantizedBuffer quantize_int8(const std::vector<float> & weight)
         max_val = std::max(weight[i], max_val);
     }
 
-    float s = (max_val - min_val) / (127 - (-128));
+    float s = (max_val - min_val) / 254.0f;
     
     std::vector<int8_t> quantized_weight (weight.size());
     for (int i = 0; i < quantized_weight.size(); i++)
     {
-        float clamped_qw = std::clamp(std::round(weight[i] / s), -128.0f, 127.0f);
+        float clamped_qw = std::clamp(std::round(weight[i] / s), -127.0f, 127.0f);
         quantized_weight[i] = static_cast<int8_t>(clamped_qw);
     }
 

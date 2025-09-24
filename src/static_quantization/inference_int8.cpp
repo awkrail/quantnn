@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
+#include <cstdint>
 
 #include "data_7.h"
 
@@ -29,6 +30,9 @@ public:
 
     QuantizedBuffer<int8_t> quantize_int8(const std::vector<float> & data);
     QuantizedBuffer<int8_t> fc1(QuantizedBuffer<int8_t> & qinput);
+    QuantizedBuffer<uint8_t> relu(QuantizedBuffer<int8_t> & hidden);
+    int fc2(QuantizedBuffer<uint8_t> & hidden);
+
     int forward_int8(const std::vector<float> & data);
 
 public:
@@ -68,7 +72,7 @@ QuantizedBuffer<int8_t> MnistFC::fc1(QuantizedBuffer<int8_t> & qinput)
     }
 
     // int8 calculation
-    std::vector<int8_t> hidden (qinput.q.size());
+    std::vector<int8_t> hidden (hidden_dim);
     for (int i = 0; i < hidden_dim; i++)
     {
         int32_t value = 0;
@@ -81,11 +85,48 @@ QuantizedBuffer<int8_t> MnistFC::fc1(QuantizedBuffer<int8_t> & qinput)
         hidden[i] = static_cast<int8_t>(std::clamp(qval, -127.0f, 127.0f));
     }
 
-    return QuantizedBuffer<int8_t> { hidden, scale };
+    return QuantizedBuffer<int8_t> { hidden, fc1_output_scale };
 }
 
-QuantizedBuffer<uint8_t> MnistFC::relu(QuantizedBuffer<int8_t> & fc1_hidden)
+QuantizedBuffer<uint8_t> MnistFC::relu(QuantizedBuffer<int8_t> & hidden)
 {
+    std::vector<uint8_t> relu_hidden (hidden.q.size());
+    for (int i = 0; i < hidden.q.size(); i++)
+    {
+        float val = static_cast<float>(hidden.q[i]) * hidden.s;
+        float qval = std::clamp(std::round(val / relu_output_scale), 0.0f, 255.0f);
+        relu_hidden[i] = static_cast<uint8_t>(qval);
+    }
+
+    return QuantizedBuffer<uint8_t> { relu_hidden, relu_output_scale };
+}
+
+int MnistFC::fc2(QuantizedBuffer<uint8_t> & hidden)
+{
+    // quantize fc2_bias
+    float scale = hidden.s * qfc2.s;
+    std::vector<int32_t> bias_int32 (fc2_bias.size());
+    for (int i = 0; i < fc2_bias.size(); i++)
+    {
+        bias_int32[i] = static_cast<int32_t>(std::round(fc2_bias[i] / scale));
+    }
+
+    // int8 calculation
+    std::vector<int32_t> output (output_dim);
+    for (int i = 0; i < output_dim; i++)
+    {
+        int32_t value = 0;
+        for (int j = 0; j < hidden_dim; j++)
+        {
+            value += static_cast<int32_t>(qfc2.q[i * hidden_dim + j]) * static_cast<int32_t>(hidden.q[j]);
+        }
+        output[i] = value + bias_int32[i];
+    }
+
+    // output prediction_idx
+    auto it = std::max_element(output.begin(), output.end());
+    int max_index = std::distance(output.begin(), it);
+    return max_index;
 }
 
 int MnistFC::forward_int8(const std::vector<float> & data)
@@ -93,7 +134,8 @@ int MnistFC::forward_int8(const std::vector<float> & data)
     QuantizedBuffer<int8_t> qinput = quantize_int8(data);
     QuantizedBuffer<int8_t> hidden = fc1(qinput);
     QuantizedBuffer<uint8_t> relu_hidden = relu(hidden);
-    return 0;
+    int prediction = fc2(relu_hidden);
+    return prediction;
 }
 
 int main(int argc, char * argv [])

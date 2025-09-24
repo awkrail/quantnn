@@ -212,7 +212,7 @@ void MnistFC::fc2(QuantizedBuffer & output, const UnsignedQuantizedBuffer & relu
     relu_hidden_int8.s = std::max(std::abs(min_relu_val), std::abs(max_relu_val)) / 127.0f;
 
     /* calculate scale based on W, x */
-    float scale = relu_hidden_int8.s * qfc2.s; // ok?
+    float scale = relu_hidden_int8.s * qfc2.s;
 
     /* convert bias -> int8 */
     std::vector<int32_t> bias_int32 (fc2_bias.size());

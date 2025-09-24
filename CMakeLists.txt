@@ -12,3 +12,4 @@ add_executable(dynamic_quantization src/dynamic_quantization/inference_int8.cpp)
 
 # simple MLP int8 static quantization
 add_executable(calibration src/static_quantization/calibration.cpp)
+add_executable(static_quantization src/static_quantization/inference_int8.cpp)

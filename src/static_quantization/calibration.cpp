@@ -24,7 +24,21 @@ float calculate_scale_int8(const std::vector<std::vector<float>> & data)
             max_val = std::max(data[i][j], max_val);
         }
     }
-    float scale = (max_val - min_val) / 254.0f;
+    float scale = std::max(std::abs(max_val), std::abs(min_val)) / 127.0f;
+    return scale;
+}
+
+float calculate_scale_uint8(const std::vector<std::vector<float>> & data)
+{
+    float max_val = 0;
+    for (int i = 0; i < data.size(); i++)
+    {
+        for (int j = 0; j < data[i].size(); j++)
+        {
+            max_val = std::max(data[i][j], max_val);
+        }
+    }
+    float scale = max_val / 255.0f;
     return scale;
 }
 
@@ -58,7 +72,7 @@ Scale MnistFC::calibrate(const std::vector<std::vector<float>> & calibration_dat
 {
     float input_scale = calculate_scale_int8(calibration_data);
 
-    // fc1
+    // fc1 - int8 symmetric quantization
     std::vector<std::vector<float>> hiddens (calibration_data.size());
     for (int i = 0; i < calibration_data.size(); i++)
     {
@@ -68,9 +82,13 @@ Scale MnistFC::calibrate(const std::vector<std::vector<float>> & calibration_dat
     }
     float fc1_scale = calculate_scale_int8(hiddens);
 
-    // relu
-
-    return Scale { input_scale, fc1_scale, 0.0f };
+    // relu - uint8 asymmetric quantization
+    for (int i = 0; i < hiddens.size(); i++)
+    {
+        relu(hiddens[i]);
+    }
+    float relu_scale = calculate_scale_uint8(hiddens);
+    return Scale { input_scale, fc1_scale, relu_scale };
 }
 
 void MnistFC::fc1(std::vector<float> & hidden, const std::vector<float> & data)

@@ -4,15 +4,19 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
 
-class MnistFC(nn.Module):
+class MnistConvNet(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.fc1 = nn.Linear(784, 128)
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
         self.relu1 = nn.ReLU(inplace=True)
-        self.fc2 = nn.Linear(128, 10)
+        self.fc1 = nn.Linear(32 * 28 * 28, 1024)
+        self.fc2 = nn.Linear(1024, 10)
 
     def forward(self, x):
+        x = self.relu1(self.conv1(x))
+        B, _, _, _ = x.shape
+        x = x.view(B, -1)
         x = self.relu1(self.fc1(x))
         x = self.fc2(x)
         return x
@@ -36,8 +40,6 @@ def train_one_epoch(model, loader, optimizer):
     crit = nn.CrossEntropyLoss()
     running = 0.0
     for x, y in loader:
-        batch_size, _, h, w = x.shape
-        x = x.view(batch_size, h * w)
         optimizer.zero_grad()
         logits = model(x)
         loss = crit(logits, y)
@@ -53,8 +55,6 @@ def evaluate(model, loader):
     total = 0
     with torch.no_grad():
         for x, y in loader:
-            batch_size, _, h, w = x.shape
-            x = x.view(batch_size, h * w)
             logits = model(x)
             pred = logits.argmax(dim=1)
             correct += (pred == y).sum().item()
@@ -64,43 +64,35 @@ def evaluate(model, loader):
 
 def main():
     train_loader, test_loader = get_loaders()
-    model = MnistFC()
+    model = MnistConvNet()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
-    for epoch in range(5):
+    for epoch in range(5): # 5
         loss = train_one_epoch(model, train_loader, optimizer)
         acc = evaluate(model, test_loader)
         print(f"Epoch {epoch+1} loss={loss:.4f} acc={acc*100:.2f}%")
 
     # save weight/bias as C++ float array
-    fc1_weights = model.fc1.weight.flatten().tolist()
-    fc2_weights = model.fc2.weight.flatten().tolist()
-
-    fc1_bias = model.fc1.bias.tolist()
-    fc2_bias = model.fc2.bias.tolist()
-    
-    fc1_weight_str = ','.join([str(x) for x in fc1_weights])
-    fc2_weight_str = ','.join([str(x) for x in fc2_weights])
-    fc1_bias_str = ','.join([str(x) for x in fc1_bias])
-    fc2_bias_str = ','.join([str(x) for x in fc2_bias])
+    conv1_weight_str = ','.join([str(x) for x in model.conv1.weight.flatten().tolist()])
+    fc1_weight_str = ','.join([str(x) for x in model.fc1.weight.flatten().tolist()])
+    fc2_weight_str = ','.join([str(x) for x in model.fc2.weight.flatten().tolist()])
+    conv1_bias_str = ','.join([str(x) for x in model.conv1.bias.flatten().tolist()])
+    fc1_bias_str = ','.join([str(x) for x in model.fc1.bias.flatten().tolist()])
+    fc2_bias_str = ','.join([str(x) for x in model.fc2.bias.flatten().tolist()])
 
     weight_const_str = (
+        "const std::vector<float> conv1_weight = {{ {} }};\n"
+        "const std::vector<float> conv1_bias = {{ {} }};\n"
         "const std::vector<float> fc1_weight = {{ {} }};\n"
         "const std::vector<float> fc1_bias = {{ {} }};\n"
         "const std::vector<float> fc2_weight = {{ {} }};\n"
         "const std::vector<float> fc2_bias = {{ {} }};"
-    ).format(fc1_weight_str, fc1_bias_str, fc2_weight_str, fc2_bias_str)
-    with open('../src/mnist_fc.h', 'w') as f:
+    ).format(conv1_weight_str, conv1_bias_str, 
+             fc1_weight_str, fc1_bias_str,
+             fc2_weight_str, fc2_bias_str)
+
+    with open('../src/fp32/mnist_conv.h', 'w') as f:
         f.write(weight_const_str)
-
-    # save sample data as data
-    data = test_loader.dataset[0][0].flatten().tolist()
-    label = test_loader.dataset[0][1]
-
-    data_str = ','.join([str(x) for x in data])
-    data_const_str = "const std::vector<float> data = {{ {} }};\n".format(data_str)
-    with open('../src/data_{}.h'.format(label), 'w') as f:
-        f.write(data_const_str)
 
 
 if __name__ == "__main__":

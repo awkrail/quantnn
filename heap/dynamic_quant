@@ -1,0 +1,475 @@
+desc: (none)
+cmd: ./build/dynamic_quantization
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=1968368
+mem_heap_B=73728
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=2070621
+mem_heap_B=174080
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=2171724
+mem_heap_B=174592
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=2172665
+mem_heap_B=175872
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=2173531
+mem_heap_B=175912
+mem_heap_extra_B=48
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=2174642
+mem_heap_B=179048
+mem_heap_extra_B=56
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=2175638
+mem_heap_B=279400
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=2276561
+mem_heap_B=280680
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=2434520
+mem_heap_B=281464
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=detailed
+n3: 281464 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 204048 0x10E876: std::__new_allocator<signed char>::allocate(unsigned long, void const*) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+  n2: 204048 0x10D76C: std::_Vector_base<signed char, std::allocator<signed char> >::_M_allocate(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+   n1: 102416 0x10E2F4: std::_Vector_base<signed char, std::allocator<signed char> >::_M_create_storage(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 102416 0x10D57E: std::_Vector_base<signed char, std::allocator<signed char> >::_Vector_base(unsigned long, std::allocator<signed char> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n2: 101632 0x10C35C: std::vector<signed char, std::allocator<signed char> >::vector(std::vector<signed char, std::allocator<signed char> > const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n0: 100352 0x10AEA7: main (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n0: 1280 in 1 place, below massif's threshold (1.00%)
+     n0: 784 in 1 place, below massif's threshold (1.00%)
+   n1: 101632 0x10C544: void std::vector<signed char, std::allocator<signed char> >::_M_range_initialize<signed char const*>(signed char const*, signed char const*, std::forward_iterator_tag) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 101632 0x10B761: std::vector<signed char, std::allocator<signed char> >::vector(std::initializer_list<signed char>, std::allocator<signed char> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n1: 100352 0x10B097: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n1: 100352 0x10B517: _GLOBAL__sub_I__ZN7MnistFCC2ERK15QuantizedBufferRKSt6vectorIfSaIfEES2_S7_ (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+       n1: 100352 0x4C23303: call_init (libc-start.c:145)
+        n1: 100352 0x4C23303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 100352 0x1092A4: (below main) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n0: 1280 in 1 place, below massif's threshold (1.00%)
+ n1: 73728 0x491B38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 3688 0x10E949: std::__new_allocator<float>::allocate(unsigned long, void const*) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+  n1: 3688 0x10D89C: std::_Vector_base<float, std::allocator<float> >::_M_allocate(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+   n1: 3688 0x10C736: void std::vector<float, std::allocator<float> >::_M_range_initialize<float const*>(float const*, float const*, std::forward_iterator_tag) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 3688 0x10B827: std::vector<float, std::allocator<float> >::vector(std::initializer_list<float>, std::allocator<float> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n1: 3136 0x10B399: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n1: 3136 0x10B517: _GLOBAL__sub_I__ZN7MnistFCC2ERK15QuantizedBufferRKSt6vectorIfSaIfEES2_S7_ (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+       n1: 3136 0x4C23303: call_init (libc-start.c:145)
+        n1: 3136 0x4C23303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 3136 0x1092A4: (below main) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n0: 552 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=10
+#-----------
+time=2569899
+mem_heap_B=282248
+mem_heap_extra_B=88
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=2570529
+mem_heap_B=282248
+mem_heap_extra_B=88
+mem_stacks_B=0
+heap_tree=peak
+n3: 282248 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 204832 0x10E876: std::__new_allocator<signed char>::allocate(unsigned long, void const*) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+  n2: 204832 0x10D76C: std::_Vector_base<signed char, std::allocator<signed char> >::_M_allocate(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+   n1: 103200 0x10E2F4: std::_Vector_base<signed char, std::allocator<signed char> >::_M_create_storage(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 103200 0x10D57E: std::_Vector_base<signed char, std::allocator<signed char> >::_Vector_base(unsigned long, std::allocator<signed char> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n2: 102416 0x10C35C: std::vector<signed char, std::allocator<signed char> >::vector(std::vector<signed char, std::allocator<signed char> > const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n0: 100352 0x10AEA7: main (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n0: 2064 in 2 places, all below massif's threshold (1.00%)
+     n0: 784 in 1 place, below massif's threshold (1.00%)
+   n1: 101632 0x10C544: void std::vector<signed char, std::allocator<signed char> >::_M_range_initialize<signed char const*>(signed char const*, signed char const*, std::forward_iterator_tag) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 101632 0x10B761: std::vector<signed char, std::allocator<signed char> >::vector(std::initializer_list<signed char>, std::allocator<signed char> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n1: 100352 0x10B097: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n1: 100352 0x10B517: _GLOBAL__sub_I__ZN7MnistFCC2ERK15QuantizedBufferRKSt6vectorIfSaIfEES2_S7_ (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+       n1: 100352 0x4C23303: call_init (libc-start.c:145)
+        n1: 100352 0x4C23303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 100352 0x1092A4: (below main) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n0: 1280 in 1 place, below massif's threshold (1.00%)
+ n1: 73728 0x491B38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 3688 0x10E949: std::__new_allocator<float>::allocate(unsigned long, void const*) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+  n1: 3688 0x10D89C: std::_Vector_base<float, std::allocator<float> >::_M_allocate(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+   n1: 3688 0x10C736: void std::vector<float, std::allocator<float> >::_M_range_initialize<float const*>(float const*, float const*, std::forward_iterator_tag) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 3688 0x10B827: std::vector<float, std::allocator<float> >::vector(std::initializer_list<float>, std::allocator<float> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n1: 3136 0x10B399: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n1: 3136 0x10B517: _GLOBAL__sub_I__ZN7MnistFCC2ERK15QuantizedBufferRKSt6vectorIfSaIfEES2_S7_ (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+       n1: 3136 0x4C23303: call_init (libc-start.c:145)
+        n1: 3136 0x4C23303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 3136 0x1092A4: (below main) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n0: 552 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=12
+#-----------
+time=2570529
+mem_heap_B=281464
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=2570929
+mem_heap_B=281976
+mem_heap_extra_B=88
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=2585578
+mem_heap_B=282104
+mem_heap_extra_B=96
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=2586200
+mem_heap_B=282616
+mem_heap_extra_B=104
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=7856174
+mem_heap_B=282104
+mem_heap_extra_B=96
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=7856367
+mem_heap_B=281592
+mem_heap_extra_B=88
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=7856756
+mem_heap_B=282104
+mem_heap_extra_B=96
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=7883162
+mem_heap_B=282232
+mem_heap_extra_B=104
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=7905412
+mem_heap_B=281720
+mem_heap_extra_B=96
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=7906177
+mem_heap_B=281848
+mem_heap_extra_B=104
+mem_stacks_B=0
+heap_tree=detailed
+n4: 281848 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 204304 0x10E876: std::__new_allocator<signed char>::allocate(unsigned long, void const*) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+  n3: 204304 0x10D76C: std::_Vector_base<signed char, std::allocator<signed char> >::_M_allocate(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+   n1: 102416 0x10E2F4: std::_Vector_base<signed char, std::allocator<signed char> >::_M_create_storage(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 102416 0x10D57E: std::_Vector_base<signed char, std::allocator<signed char> >::_Vector_base(unsigned long, std::allocator<signed char> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n2: 102416 0x10C35C: std::vector<signed char, std::allocator<signed char> >::vector(std::vector<signed char, std::allocator<signed char> > const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n0: 100352 0x10AEA7: main (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n0: 2064 in 2 places, all below massif's threshold (1.00%)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+   n1: 101632 0x10C544: void std::vector<signed char, std::allocator<signed char> >::_M_range_initialize<signed char const*>(signed char const*, signed char const*, std::forward_iterator_tag) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 101632 0x10B761: std::vector<signed char, std::allocator<signed char> >::vector(std::initializer_list<signed char>, std::allocator<signed char> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n1: 100352 0x10B097: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n1: 100352 0x10B517: _GLOBAL__sub_I__ZN7MnistFCC2ERK15QuantizedBufferRKSt6vectorIfSaIfEES2_S7_ (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+       n1: 100352 0x4C23303: call_init (libc-start.c:145)
+        n1: 100352 0x4C23303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 100352 0x1092A4: (below main) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n0: 1280 in 1 place, below massif's threshold (1.00%)
+   n0: 256 in 1 place, below massif's threshold (1.00%)
+ n1: 73728 0x491B38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 3688 0x10E949: std::__new_allocator<float>::allocate(unsigned long, void const*) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+  n2: 3688 0x10D89C: std::_Vector_base<float, std::allocator<float> >::_M_allocate(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+   n1: 3688 0x10C736: void std::vector<float, std::allocator<float> >::_M_range_initialize<float const*>(float const*, float const*, std::forward_iterator_tag) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 3688 0x10B827: std::vector<float, std::allocator<float> >::vector(std::initializer_list<float>, std::allocator<float> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n1: 3136 0x10B399: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n1: 3136 0x10B517: _GLOBAL__sub_I__ZN7MnistFCC2ERK15QuantizedBufferRKSt6vectorIfSaIfEES2_S7_ (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+       n1: 3136 0x4C23303: call_init (libc-start.c:145)
+        n1: 3136 0x4C23303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 3136 0x1092A4: (below main) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n0: 552 in 2 places, all below massif's threshold (1.00%)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 128 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=22
+#-----------
+time=7934782
+mem_heap_B=281888
+mem_heap_extra_B=120
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=7936647
+mem_heap_B=281898
+mem_heap_extra_B=134
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=7937263
+mem_heap_B=281938
+mem_heap_extra_B=150
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=8008518
+mem_heap_B=281898
+mem_heap_extra_B=134
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=8008711
+mem_heap_B=281858
+mem_heap_extra_B=118
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=8008908
+mem_heap_B=281730
+mem_heap_extra_B=110
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=8009451
+mem_heap_B=281720
+mem_heap_extra_B=96
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=8009651
+mem_heap_B=281592
+mem_heap_extra_B=88
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=8009851
+mem_heap_B=281464
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=8010051
+mem_heap_B=280680
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=detailed
+n4: 280680 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 203264 0x10E876: std::__new_allocator<signed char>::allocate(unsigned long, void const*) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+  n3: 203264 0x10D76C: std::_Vector_base<signed char, std::allocator<signed char> >::_M_allocate(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+   n1: 101632 0x10C544: void std::vector<signed char, std::allocator<signed char> >::_M_range_initialize<signed char const*>(signed char const*, signed char const*, std::forward_iterator_tag) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 101632 0x10B761: std::vector<signed char, std::allocator<signed char> >::vector(std::initializer_list<signed char>, std::allocator<signed char> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n1: 100352 0x10B097: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n1: 100352 0x10B517: _GLOBAL__sub_I__ZN7MnistFCC2ERK15QuantizedBufferRKSt6vectorIfSaIfEES2_S7_ (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+       n1: 100352 0x4C23303: call_init (libc-start.c:145)
+        n1: 100352 0x4C23303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 100352 0x1092A4: (below main) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n0: 1280 in 1 place, below massif's threshold (1.00%)
+   n1: 101632 0x10E2F4: std::_Vector_base<signed char, std::allocator<signed char> >::_M_create_storage(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 101632 0x10D57E: std::_Vector_base<signed char, std::allocator<signed char> >::_Vector_base(unsigned long, std::allocator<signed char> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n2: 101632 0x10C35C: std::vector<signed char, std::allocator<signed char> >::vector(std::vector<signed char, std::allocator<signed char> > const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n0: 100352 0x10AEA7: main (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n0: 1280 in 2 places, all below massif's threshold (1.00%)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 73728 0x491B38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 3688 0x10E949: std::__new_allocator<float>::allocate(unsigned long, void const*) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+  n2: 3688 0x10D89C: std::_Vector_base<float, std::allocator<float> >::_M_allocate(unsigned long) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+   n1: 3688 0x10C736: void std::vector<float, std::allocator<float> >::_M_range_initialize<float const*>(float const*, float const*, std::forward_iterator_tag) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+    n2: 3688 0x10B827: std::vector<float, std::allocator<float> >::vector(std::initializer_list<float>, std::allocator<float> const&) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n1: 3136 0x10B399: __static_initialization_and_destruction_0() (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+      n1: 3136 0x10B517: _GLOBAL__sub_I__ZN7MnistFCC2ERK15QuantizedBufferRKSt6vectorIfSaIfEES2_S7_ (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+       n1: 3136 0x4C23303: call_init (libc-start.c:145)
+        n1: 3136 0x4C23303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+         n0: 3136 0x1092A4: (below main) (in /home/awkrail/research/quantnn/build/dynamic_quantization)
+     n0: 552 in 2 places, all below massif's threshold (1.00%)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 0 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=32
+#-----------
+time=8013998
+mem_heap_B=281704
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=8023525
+mem_heap_B=280424
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=8023725
+mem_heap_B=180072
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=8024000
+mem_heap_B=176936
+mem_heap_extra_B=56
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=8024223
+mem_heap_B=176896
+mem_heap_extra_B=40
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=8024442
+mem_heap_B=175616
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=8024665
+mem_heap_B=175104
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=8024884
+mem_heap_B=74752
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=8035752
+mem_heap_B=1024
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=8036932
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=detailed
+n1: 0 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 0 in 6 places, all below massif's threshold (1.00%)

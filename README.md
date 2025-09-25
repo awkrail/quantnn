@@ -24,6 +24,10 @@ The weights are saved as `int8_t`, but during the computation process, `int32_t`
 ### Level.3: Static Quantization (INT8)
 The weights are saved as `int8_t` and scales/zero-points of middle layers are also saved.
 Hence, the comsumed runtime memory should be about 1/4 to the original fp32.
+```
+./build/calibration
+./build/static_quantization
+```
 
 **WIP**
 

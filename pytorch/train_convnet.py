@@ -8,10 +8,10 @@ class MnistConvNet(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.conv1 = nn.Conv2d(1, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        self.conv1 = nn.Conv2d(1, 5, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
         self.relu1 = nn.ReLU(inplace=True)
-        self.fc1 = nn.Linear(32 * 28 * 28, 1024)
-        self.fc2 = nn.Linear(1024, 10)
+        self.fc1 = nn.Linear(5 * 28 * 28, 128)
+        self.fc2 = nn.Linear(128, 10)
 
     def forward(self, x):
         x = self.relu1(self.conv1(x))

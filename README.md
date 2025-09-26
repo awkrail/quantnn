@@ -29,7 +29,16 @@ Hence, the comsumed runtime memory should be about 1/4 to the original fp32.
 ./build/static_quantization
 ```
 
-**WIP**
+### Level.4: ConvNet (FP32)
+Run `train_convnet.py` and then run `./build/convnet_float32`
+```
+cd pytorch
+python train_convnet.py
+cd ..
+./build/convnet_float32
+```
+We used `im2col` techniques.
+
 
 ### Level.4: Quantization-aware Training
 

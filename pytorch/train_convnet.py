@@ -91,7 +91,7 @@ def main():
              fc1_weight_str, fc1_bias_str,
              fc2_weight_str, fc2_bias_str)
 
-    with open('../src/fp32/mnist_conv.h', 'w') as f:
+    with open('../src/conv/fp32/mnist_conv.h', 'w') as f:
         f.write(weight_const_str)
 
 

@@ -27,7 +27,7 @@ QuantizedBuffer quantize_int8(const std::vector<float> & weight)
         max_val = std::max(weight[i], max_val);
     }
 
-    float s = (max_val - min_val) / 254.0f;
+    float s = (max_val - min_val) / 127.0f;
     
     std::vector<int8_t> quantized_weight (weight.size());
     for (int i = 0; i < quantized_weight.size(); i++)

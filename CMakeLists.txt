@@ -4,7 +4,7 @@ project(quantnn LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 # simple MLP float32
-add_executable(mlp_float32 src/fp32/mnist_fc_fp32.cpp)
+Add_executable(mlp_float32 src/fp32/mnist_fc.cpp)
 
 # simple MLP int8 dynamic quantization
 add_executable(quantize_weight src/dynamic_quantization/quantize_weight.cpp)

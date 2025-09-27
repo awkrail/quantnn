@@ -15,6 +15,9 @@ public:
 
     std::vector<float> padding(std::vector<float> & data);
     std::vector<float> conv1(std::vector<float> & data);
+    std::vector<float> fc1(std::vector<float> & data);
+    std::vector<float> relu(std::vector<float> & data);
+    std::vector<float> fc2(std::vector<float> & data);
     int forward(std::vector<float> & data);
 
 public:
@@ -33,8 +36,9 @@ public:
     const int kernel_size = 3;
     const int stride = 1;
     const int pad_size = 1;
-    const int fc1_hidden_size = 5 * 28 * 28;
-    const int fc2_hidden_size = 1024;
+    const int fc1_input_dim = output_channel_num * image_size * image_size;
+    const int fc1_hidden_dim = 128;
+    const int fc2_hidden_dim = 10;
 };
 
 MnistConv::MnistConv(const std::vector<float> & conv1_weight, const std::vector<float> & conv1_bias,
@@ -85,16 +89,64 @@ std::vector<float> MnistConv::conv1(std::vector<float> & data)
     return output;
 }
 
+std::vector<float> MnistConv::fc1(std::vector<float> & data)
+{
+    std::vector<float> fc1_output (fc1_hidden_dim);
+    for (int i = 0; i < fc1_hidden_dim; i++)
+    {
+        float value = 0.0f;
+        for (int j = 0; j < fc1_input_dim; j++)
+        {
+            value += fc1_weight[i * fc1_input_dim + j] * data[j];
+        }
+        fc1_output[i] = value + fc1_bias[i];
+    }
+    return fc1_output;
+}
+
+std::vector<float> MnistConv::relu(std::vector<float> & data)
+{
+    for (int i = 0; i < fc1_hidden_dim; i++)
+    {
+        data[i] = std::max(0.0f, data[i]);
+    }
+    return data;
+}
+
+std::vector<float> MnistConv::fc2(std::vector<float> & data)
+{
+    std::vector<float> fc2_output (fc2_hidden_dim);
+    for (int i = 0; i < fc2_hidden_dim; i++)
+    {
+        float val = 0.0f;
+        for (int j = 0; j < fc1_hidden_dim; j++)
+        {
+            val += fc2_weight[i * fc2_hidden_dim + j] * data[j];
+        }
+        fc2_output[i] = val + fc2_bias[i];
+    }
+    return fc2_output;
+}
+
 int MnistConv::forward(std::vector<float> & data)
 {
     data = padding(data);
     data = conv1(data);
-    for (auto & d : data)
+    data = fc1(data);
+    data = relu(data);
+    data = fc2(data);
+
+    int max_index = 0;
+    float max_val = -1e+5;
+    for (int i = 0; i < data.size(); i++)
     {
-        std::cout << d << " ";
+        if (data[i] > max_val)
+        {
+            max_index = i;
+            max_val = data[i];
+        }
     }
-    std::cout << std::endl;
-    return 0;
+    return max_index;
 }
 
 int main(int argc, char * argv[])

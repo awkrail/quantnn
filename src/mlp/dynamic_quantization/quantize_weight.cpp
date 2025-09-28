@@ -64,8 +64,8 @@ int main()
     QuantizedBuffer quantized_fc1 = quantize_int8(fc1_weight);
     QuantizedBuffer quantized_fc2 = quantize_int8(fc2_weight);
 
-    dump_as_header_file(quantized_fc1, "fc1", "src/weight_fp32_to_int8/quantized_fc1.h");
-    dump_as_header_file(quantized_fc2, "fc2", "src/weight_fp32_to_int8/quantized_fc2.h");
+    dump_as_header_file(quantized_fc1, "fc1", "src/mlp/dynamic_quantization/quantized_fc1.h");
+    dump_as_header_file(quantized_fc2, "fc2", "src/mlp/dynamic_quantization/quantized_fc2.h");
 
     return 0;
 }

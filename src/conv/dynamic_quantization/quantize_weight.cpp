@@ -40,12 +40,13 @@ QuantizedConvBuffer<int8_t> quantize_channel_int8(const std::vector<float> & wei
         int end_index = (i+1) * elem_num;
 
         float max_val = 1e-5;
+        float min_val = 1e+5;
         for (int j = start_index; j < end_index; j++)
         {
             max_val = std::max(weight[j], max_val);
+            min_val = std::min(weight[j], min_val);
         }
-
-        float scale = max_val / 127.0f;
+        float scale = std::max(std::abs(max_val), std::abs(min_val)) / 127.0f;
         for (int j = start_index; j < end_index; j++)
         {
             float qval = std::clamp(std::round(weight[j] / scale), -127.0f, 127.0f);
@@ -65,8 +66,7 @@ QuantizedBuffer<int8_t> quantize_int8(const std::vector<float> & weight)
         min_val = std::min(weight[i], min_val);
         max_val = std::max(weight[i], max_val);
     }
-
-    float scale = (max_val - min_val) / 127.0f;
+    float scale = std::max(std::abs(max_val), std::abs(min_val)) / 127.0f;
     std::vector<int8_t> quantized_weight (weight.size());
     for (int i = 0; i < quantized_weight.size(); i++)
     {

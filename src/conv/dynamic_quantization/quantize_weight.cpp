@@ -127,9 +127,9 @@ int main()
     QuantizedBuffer<int8_t> quantized_fc1 = quantize_int8(fc1_weight);
     QuantizedBuffer<int8_t> quantized_fc2 = quantize_int8(fc2_weight);
 
-    dump_as_header_file_conv(quantized_conv1, "conv1", "src/conv/dynamic_quantization/quantized_conv1.h");
-    dump_as_header_file(quantized_fc1, "fc1", "src/conv/dynamic_quantization/quantized_fc1.h");
-    dump_as_header_file(quantized_fc1, "fc2", "src/conv/dynamic_quantization/quantized_fc2.h");
+    dump_as_header_file_conv(quantized_conv1, "qconv1", "src/conv/dynamic_quantization/quantized_conv1.h");
+    dump_as_header_file(quantized_fc1, "qfc1", "src/conv/dynamic_quantization/quantized_fc1.h");
+    dump_as_header_file(quantized_fc1, "qfc2", "src/conv/dynamic_quantization/quantized_fc2.h");
 
     return 0;
 }

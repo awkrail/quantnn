@@ -14,3 +14,4 @@ add_executable(static_quantization src/mlp/static_quantization/inference_int8.cp
 # Mnist - ConvNet float32
 add_executable(convnet_float32 src/conv/fp32/mnist_conv.cpp)
 add_executable(quantize_weight_conv src/conv/dynamic_quantization/quantize_weight.cpp)
+add_executable(conv_dynamic_quantization src/conv/dynamic_quantization/inference.cpp)

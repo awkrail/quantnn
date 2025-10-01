@@ -25,6 +25,7 @@ struct QuantizedBuffer
 {
     std::vector<T> q;
     float s;
+    int zp;
 };
 
 class MnistConv
@@ -93,20 +94,24 @@ QuantizedBuffer<int8_t> MnistConv::quantize(const std::vector<float> & data)
         float qval = std::clamp(std::round(data[i] / s), -127.0f, 127.0f);
         quantized[i] = static_cast<int8_t>(qval);
     }
-    return QuantizedBuffer<int8_t> { quantized, s };
+    return QuantizedBuffer<int8_t> { quantized, s, 0 };
 }
 
 QuantizedBuffer<uint8_t> MnistConv::quantize_uint8(const std::vector<float> & data)
 {
+    float min_val = *std::min_element(data.begin(), data.end());
     float max_val = *std::max_element(data.begin(), data.end());
-    float s = max_val / 255.0f;
+    float s = (max_val - min_val) / 255.0f;
+    int zp = static_cast<int>(std::round(-min_val / s));
+    zp = std::clamp(zp, 0, 255);
     std::vector<uint8_t> quantized (data.size());
     for (int i = 0; i < data.size(); i++)
     {
-        float qval = std::clamp(std::round(data[i] / s), 0.0f, 255.0f);
+        int qval = static_cast<int>(std::round(data[i] / s)) + zp;
+        qval = std::clamp(qval, 0, 255);
         quantized[i] = static_cast<uint8_t>(qval);
     }
-    return QuantizedBuffer<uint8_t> { quantized, s };
+    return QuantizedBuffer<uint8_t> { quantized, s, zp };
 }
 
 QuantizedBuffer<int8_t> MnistConv::conv1(QuantizedBuffer<int8_t> & data)
@@ -131,9 +136,9 @@ QuantizedBuffer<int8_t> MnistConv::conv1(QuantizedBuffer<int8_t> & data)
                         qval += static_cast<int32_t>(data.q[target_index]) * static_cast<int32_t>(qconv1.q[weight_index]);
                     }
                 }
-                float rval = qconv1.s[o] * data.s * qval;
+                float rval = qconv1.s[o] * data.s * qval + conv1_bias[o];
                 int output_index = o * oH_size * oW_size + i * oW_size + j;
-                output[output_index] = rval + conv1_bias[o];
+                output[output_index] = rval;
             }
         }
     }
@@ -148,7 +153,7 @@ QuantizedBuffer<int8_t> MnistConv::fc1(QuantizedBuffer<int8_t> & data)
         int32_t qval = 0;
         for (int j = 0; j < fc1_input_dim; j++)
         {
-            qval += qfc1.q[i * fc1_input_dim + j] * data.q[j];
+            qval += static_cast<int32_t>(qfc1.q[i * fc1_input_dim + j]) * static_cast<int32_t>(data.q[j]);
         }
         float value = data.s * qfc1.s * qval + fc1_bias[i];
         output[i] = value;
@@ -164,7 +169,7 @@ std::vector<float> MnistConv::fc2(QuantizedBuffer<uint8_t> & data)
         int32_t qval = 0;
         for (int j = 0; j < fc1_hidden_dim; j++)
         {
-            qval += qfc2.q[i * fc1_hidden_dim + j] * data.q[j];
+            qval += static_cast<int32_t>(qfc2.q[i * fc1_hidden_dim + j]) * static_cast<int32_t>(data.q[j]);
         }
         float value = data.s * qfc2.s * qval + fc2_bias[i];
         output[i] = value;
@@ -180,6 +185,7 @@ QuantizedBuffer<uint8_t> MnistConv::relu(QuantizedBuffer<int8_t> & data)
         float value = static_cast<float>(data.q[i]) * data.s;
         output[i] = std::max(0.0f, value);
     }
+    
     return quantize_uint8(output);
 }
 
@@ -189,13 +195,13 @@ int MnistConv::forward(std::vector<float> & data)
     qdata = conv1(qdata);
     qdata = fc1(qdata);
     QuantizedBuffer<uint8_t> uint8_qdata = relu(qdata);
+    //QuantizedBuffer<int8_t> uint8_qdata = relu(qdata);
     std::vector<float> output = fc2(uint8_qdata);
 
     int max_index = 0;
     float max_val = 1e-5;
     for (int i = 0; i < output.size(); i++)
     {
-        std::cout << output[i] << std::endl;
         if (max_val < output[i])
         {
             max_val = output[i];

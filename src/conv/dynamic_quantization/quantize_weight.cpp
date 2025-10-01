@@ -129,7 +129,7 @@ int main()
 
     dump_as_header_file_conv(quantized_conv1, "qconv1", "src/conv/dynamic_quantization/quantized_conv1.h");
     dump_as_header_file(quantized_fc1, "qfc1", "src/conv/dynamic_quantization/quantized_fc1.h");
-    dump_as_header_file(quantized_fc1, "qfc2", "src/conv/dynamic_quantization/quantized_fc2.h");
+    dump_as_header_file(quantized_fc2, "qfc2", "src/conv/dynamic_quantization/quantized_fc2.h");
 
     return 0;
 }

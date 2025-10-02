@@ -195,7 +195,6 @@ int MnistConv::forward(std::vector<float> & data)
     qdata = conv1(qdata);
     qdata = fc1(qdata);
     QuantizedBuffer<uint8_t> uint8_qdata = relu(qdata);
-    //QuantizedBuffer<int8_t> uint8_qdata = relu(qdata);
     std::vector<float> output = fc2(uint8_qdata);
 
     int max_index = 0;

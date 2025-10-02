@@ -54,16 +54,21 @@ MnistConv::MnistConv(const std::vector<float> & conv1_weight, const std::vector<
     : conv1_weight{conv1_weight}, conv1_bias{conv1_bias}, fc1_weight{fc1_weight}, fc1_bias{fc1_bias},
       fc2_weight{fc2_weight}, fc2_bias{fc2_bias} {}
 
-std::vector<float> MnistConv::padding(std::vector<float> & data)
+std::vector<std::vector<float>> MnistConv::padding(std::vector<std::vector<float>> & data)
 {
-    std::vector<float> padded_data(padded_image_size * padded_image_size, 0.0f);
-    for (int i = 0; i < image_size; i++)
+    std::vector<std::vector<float>> padded_data_list (data.size());
+    for (int i = 0; i < data.size(); i++)
     {
-        float * dst = &padded_data[(i + pad_size) * padded_image_size + pad_size];
-        float * src = &data[i * image_size];
-        memcpy(dst, src, image_size * sizeof(float));
+        std::vector<float> padded_data(padded_image_size * padded_image_size, 0.0f);
+        for (int i = 0; i < image_size; i++)
+        {
+            float * dst = &padded_data[(i + pad_size) * padded_image_size + pad_size];
+            float * src = &data[i * image_size];
+            memcpy(dst, src, image_size * sizeof(float));
+        }
+        padded_data_list[i] = padded_data;
     }
-    return padded_data;
+    return padded_data_list;
 }
 
 std::vector<float> MnistConv::conv1(std::vector<float> & data)
@@ -138,6 +143,7 @@ std::vector<float> MnistConv::fc2(std::vector<float> & data)
 Scale MnistConv::calibrate(std::vector<std::vector<float>> & data)
 {
     data = padding(calibration_data);
+    /**
     data = conv1(data);
     data = fc1(data);
     data = relu(data);
@@ -153,7 +159,8 @@ Scale MnistConv::calibrate(std::vector<std::vector<float>> & data)
             max_val = data[i];
         }
     }
-    return max_index;
+    **/
+    return Scale { 0, 0, 0, 0, 0 };
 }
 
 int main(int argc, char * argv[])

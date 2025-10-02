@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cstring>
 
 #include "mnist_conv.h"
 #include "calibration_data.h"
@@ -10,8 +11,38 @@ struct Scale
     float conv1_scale;
     float fc1_scale;
     float relu_scale;
-    float relu_scale;
+    float fc2_scale;
 };
+
+float calculate_scale_int8(std::vector<std::vector<float>> & data)
+{
+    float min_val = 1e+5;
+    float max_val = 1e-5;
+    for (int i = 0; i < data.size(); i++)
+    {
+        for (int j = 0; j < data[i].size(); j++)
+        {
+            min_val = std::min(data[i][j], min_val);
+            max_val = std::max(data[i][j], max_val);
+        }
+    }
+    float scale = std::max(std::abs(max_val), std::abs(min_val)) / 127.0f;
+    return scale;
+}
+
+float calculate_scale_uint8(std::vector<std::vector<float>> & data)
+{
+    float max_val = 1e-5;
+    for (int i = 0; i < data.size(); i++)
+    {
+        for (int j = 0; j < data[i].size(); j++)
+        {
+            max_val = std::max(data[i][j], max_val);
+        }
+    }
+    float scale = max_val / 255.0f;
+    return scale;
+}
 
 class MnistConv
 {
@@ -20,11 +51,11 @@ public:
               const std::vector<float> & fc1_weight, const std::vector<float> & fc1_bias,
               const std::vector<float> & fc2_weight, const std::vector<float> & fc2_bias);
 
-    std::vector<float> padding(std::vector<float> & data);
-    std::vector<float> conv1(std::vector<float> & data);
-    std::vector<float> fc1(std::vector<float> & data);
-    std::vector<float> relu(std::vector<float> & data);
-    std::vector<float> fc2(std::vector<float> & data);
+    std::vector<std::vector<float>> padding(std::vector<std::vector<float>> & data);
+    std::vector<std::vector<float>> conv1(std::vector<std::vector<float>> & data);
+    std::vector<std::vector<float>> fc1(std::vector<std::vector<float>> & data);
+    std::vector<std::vector<float>> relu(std::vector<std::vector<float>> & data);
+    std::vector<std::vector<float>> fc2(std::vector<std::vector<float>> & data);
     Scale calibrate(std::vector<std::vector<float>> & data);
 
 public:
@@ -60,10 +91,10 @@ std::vector<std::vector<float>> MnistConv::padding(std::vector<std::vector<float
     for (int i = 0; i < data.size(); i++)
     {
         std::vector<float> padded_data(padded_image_size * padded_image_size, 0.0f);
-        for (int i = 0; i < image_size; i++)
+        for (int j = 0; j < image_size; j++)
         {
-            float * dst = &padded_data[(i + pad_size) * padded_image_size + pad_size];
-            float * src = &data[i * image_size];
+            float * dst = &padded_data[(j + pad_size) * padded_image_size + pad_size];
+            float * src = &data[i][j * image_size];
             memcpy(dst, src, image_size * sizeof(float));
         }
         padded_data_list[i] = padded_data;
@@ -71,102 +102,113 @@ std::vector<std::vector<float>> MnistConv::padding(std::vector<std::vector<float
     return padded_data_list;
 }
 
-std::vector<float> MnistConv::conv1(std::vector<float> & data)
+std::vector<std::vector<float>> MnistConv::conv1(std::vector<std::vector<float>> & data)
 {
-    const int output_size = image_size - kernel_size + 2 * pad_size + 1;
-    std::vector<float> output (output_channel_num * output_size * output_size);
-    const int oW_size = padded_image_size - kernel_size + 1;
-    const int oH_size = padded_image_size - kernel_size + 1;
-    for (int o = 0; o < output_channel_num; o++)
+    std::vector<std::vector<float>> conv1_data_list (data.size());
+    for (int m = 0; m < data.size(); m++)
     {
-        for (int i = 0; i < oH_size; i++)
+        const int output_size = image_size - kernel_size + 2 * pad_size + 1;
+        std::vector<float> output (output_channel_num * output_size * output_size);
+        const int oW_size = padded_image_size - kernel_size + 1;
+        const int oH_size = padded_image_size - kernel_size + 1;
+        for (int o = 0; o < output_channel_num; o++)
         {
-            for (int j = 0; j < oW_size; j++)
+            for (int i = 0; i < oH_size; i++)
             {
-                float val = 0.0f;
-                for (int k = 0; k < kernel_size; k++)
+                for (int j = 0; j < oW_size; j++)
                 {
-                    for (int l = 0; l < kernel_size; l++)
+                    float val = 0.0f;
+                    for (int k = 0; k < kernel_size; k++)
                     {
-                        int target_index = (i + k) * padded_image_size + (j + l);
-                        int weight_index = o * kernel_size * kernel_size + kernel_size * k + l;
-                        val += data[target_index] * conv1_weight[weight_index];
+                        for (int l = 0; l < kernel_size; l++)
+                        {
+                            int target_index = (i + k) * padded_image_size + (j + l);
+                            int weight_index = o * kernel_size * kernel_size + kernel_size * k + l;
+                            val += data[m][target_index] * conv1_weight[weight_index];
+                        }
                     }
+                    int output_index = o * oH_size * oW_size + i * oW_size + j;
+                    output[output_index] = val + conv1_bias[o];
                 }
-                int output_index = o * oH_size * oW_size + i * oW_size + j;
-                output[output_index] = val + conv1_bias[o];
             }
         }
+        conv1_data_list[m] = output;
     }
-    return output;
+    return conv1_data_list;
 }
 
-std::vector<float> MnistConv::fc1(std::vector<float> & data)
+std::vector<std::vector<float>> MnistConv::fc1(std::vector<std::vector<float>> & data)
 {
-    std::vector<float> fc1_output (fc1_hidden_dim);
-    for (int i = 0; i < fc1_hidden_dim; i++)
+    std::vector<std::vector<float>> fc1_output_list (data.size());
+    for (int k = 0; k < data.size(); k++)
     {
-        float value = 0.0f;
-        for (int j = 0; j < fc1_input_dim; j++)
+        std::vector<float> fc1_output (fc1_hidden_dim);
+        for (int i = 0; i < fc1_hidden_dim; i++)
         {
-            value += fc1_weight[i * fc1_input_dim + j] * data[j];
+            float value = 0.0f;
+            for (int j = 0; j < fc1_input_dim; j++)
+            {
+                value += fc1_weight[i * fc1_input_dim + j] * data[k][j];
+            }
+            fc1_output[i] = value + fc1_bias[i];
         }
-        fc1_output[i] = value + fc1_bias[i];
+        fc1_output_list[k] = fc1_output;
     }
-    return fc1_output;
+    return fc1_output_list;
 }
 
-std::vector<float> MnistConv::relu(std::vector<float> & data)
+std::vector<std::vector<float>> MnistConv::relu(std::vector<std::vector<float>> & data)
 {
-    for (int i = 0; i < fc1_hidden_dim; i++)
+    for (int k = 0; k < data.size(); k++)
     {
-        data[i] = std::max(0.0f, data[i]);
+        for (int i = 0; i < fc1_hidden_dim; i++)
+        {
+            data[k][i] = std::max(0.0f, data[k][i]);
+        }
     }
     return data;
 }
 
-std::vector<float> MnistConv::fc2(std::vector<float> & data)
+std::vector<std::vector<float>> MnistConv::fc2(std::vector<std::vector<float>> & data)
 {
-    std::vector<float> fc2_output (fc2_hidden_dim);
-    for (int i = 0; i < fc2_hidden_dim; i++)
+    std::vector<std::vector<float>> fc2_output_list(data.size());
+    for (int k = 0; k < fc2_output_list.size(); k++)
     {
-        float val = 0.0f;
-        for (int j = 0; j < fc1_hidden_dim; j++)
+        std::vector<float> fc2_output (fc2_hidden_dim);
+        for (int i = 0; i < fc2_hidden_dim; i++)
         {
-            val += fc2_weight[i * fc2_hidden_dim + j] * data[j];
+            float val = 0.0f;
+            for (int j = 0; j < fc1_hidden_dim; j++)
+            {
+                val += fc2_weight[i * fc2_hidden_dim + j] * data[k][j];
+            }
+            fc2_output[i] = val + fc2_bias[i];
         }
-        fc2_output[i] = val + fc2_bias[i];
+        fc2_output_list[k] = fc2_output;
     }
-    return fc2_output;
+    return fc2_output_list;
 }
 
 Scale MnistConv::calibrate(std::vector<std::vector<float>> & data)
 {
-    data = padding(calibration_data);
-    /**
-    data = conv1(data);
-    data = fc1(data);
-    data = relu(data);
-    data = fc2(data);
+    std::vector<std::vector<float>> padded_data = padding(data);
+    float input_scale = calculate_scale_int8(padded_data);
+    std::vector<std::vector<float>> conv1_data = conv1(padded_data);
+    float conv1_scale = calculate_scale_int8(conv1_data);
+    std::vector<std::vector<float>> fc1_data = fc1(data);
+    float fc1_scale = calculate_scale_int8(fc1_data);
+    std::vector<std::vector<float>> relu_data = relu(fc1_data);
+    float relu_scale = calculate_scale_uint8(relu_data);
+    std::vector<std::vector<float>> fc2_data = fc2(relu_data);
+    float fc2_scale = calculate_scale_int8(fc2_data);
 
-    int max_index = 0;
-    float max_val = -1e+5;
-    for (int i = 0; i < data.size(); i++)
-    {
-        if (data[i] > max_val)
-        {
-            max_index = i;
-            max_val = data[i];
-        }
-    }
-    **/
-    return Scale { 0, 0, 0, 0, 0 };
+    return Scale { input_scale, conv1_scale, fc1_scale, relu_scale, fc2_scale };
 }
 
 int main(int argc, char * argv[])
 {
     MnistConv model(conv1_weight, conv1_bias, fc1_weight, fc1_bias, fc2_weight, fc2_bias);
-    Scale scale = model.calibrate(data);
+    Scale scale = model.calibrate(calibration_data);
     
     float input_scale = scale.input_scale;
     float conv1_scale = scale.conv1_scale;
@@ -174,12 +216,7 @@ int main(int argc, char * argv[])
     float relu_scale = scale.relu_scale;
     float fc2_scale = scale.fc2_scale;
 
-    std::cout <<
-        input_scale << " "
-        conv1_scale << " "
-        fc1_scale << " "
-        relu_scale << " "
-        fc2_scale << std::endl;
+    std::cout << input_scale << " " << conv1_scale << " " << fc1_scale << " " << relu_scale << " " << fc2_scale << std::endl;
 
     return 0;
 }

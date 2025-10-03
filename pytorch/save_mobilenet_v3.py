@@ -1,0 +1,27 @@
+from torchvision.models import mobilenet_v3_small, MobileNet_V3_Small_Weights
+
+def transform_param_to_str(param):
+    param_list = []
+    for x in param:
+        x = str(x.item())[:6] + 'f'
+        param_list.append(x)
+    param_list_str = ', '.join(param_list)
+    return param_list_str
+
+
+def main():
+    model = mobilenet_v3_small(MobileNet_V3_Small_Weights.IMAGENET1K_V1)
+    model.eval()
+
+    param_str_list = []
+    for name, param in model.named_parameters():
+        param_str = transform_param_to_str(param.flatten())
+        param_str = "const std::vector<float> {} = {{ {} }};\n".format(name.replace('.', '_'), param_str)
+        param_str_list.append(param_str)
+
+    with open('../src/mobilenet_v3/mobilenet_v3.h', 'w') as f:
+        for param_str in param_str_list:
+            f.write(param_str + '\n')
+
+if __name__ == "__main__":
+    main()
